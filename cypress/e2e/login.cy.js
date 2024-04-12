@@ -1,8 +1,6 @@
 import { faker as fakerJs } from '@faker-js/faker';
 import fakerBr from 'faker-br';
 
-
-
 describe('Cadastro de usuário', () => {
   
   const cadastro = {
@@ -16,15 +14,14 @@ describe('Cadastro de usuário', () => {
     rua: fakerJs.location.street(),
     
   }
-  
-
 
 
   it('Realizando cadastro', () => {
     const cpf = fakerBr.br.cpf();
-
+    cy.intercept("POST" , "https://api.pn.vg/api/v1/pushonsite/**").as("teste") 
     cy.visit('auth/login')
     cy.get('#email').type(cadastro.email)
+    cy.wait("@teste")
     cy.get(':nth-child(2) > .column > .form-group > [data-testid="submitButton"]').click()
     cy.get('#name').type(cadastro.nome)
     cy.get('#lastName').type(cadastro.sobrenome)
@@ -49,10 +46,16 @@ describe('Cadastro de usuário', () => {
     cy.mailosaurGetMessage(Cypress.env('MAILOSAUR_SERVER_ID'), {
       sentTo: cadastro.email
     }).then(message => {
-      const confirmationCode = message.html.codes[0].value
-      cy.get(':nth-child(1) > .otp-input').type(confirmationCode)
+      const confirmationCode00 = message.html.codes[0].value
+      const confirmationCode01 = message.html.codes[1].value
+      cy.get(':nth-child(1) > .otp-input').type(confirmationCode00)
+      cy.get(':nth-child(4) > .otp-input').type(confirmationCode01)
     })
-    
-    
+    cy.get('.status__title')
+    .invoke('text')
+    .then((text) => {
+      const textoSemEspacos = text.trim();
+      expect(textoSemEspacos).to.eq('Sua conta foi cadastrada!');
+    });
   })
 })
