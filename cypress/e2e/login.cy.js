@@ -1,8 +1,6 @@
 describe('Cadastro de usuário', () => {
   beforeEach(() => {
-    cy.intercept('POST', 'https://apm.netshoes.com.br/intake/v2/rum/events', {
-      prevent: true 
-    });
+    cy.Interceptation()
   });
   it('Realizando cadastro', () => {
     cy.generateUserData().then((userData) => {

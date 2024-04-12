@@ -6,7 +6,6 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     baseUrl: 'https://www.netshoes.com.br/',
-    proxy: 'https://apm.netshoes.com.br' // Add the proxy configuration here
   },
   viewportWidth: 1440,
   viewportHeight: 900,

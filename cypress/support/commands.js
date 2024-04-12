@@ -34,10 +34,6 @@ Cypress.Commands.add('fillRegistrationForm', (userData) => {
 });
 
 Cypress.Commands.add('registerUser', (userData) => {
-  cy.intercept('POST', 'https://www.google.com/recaptcha/api2/reload?**').as('PostReload')
-  cy.intercept('POST', 'https://www.google-analytics.com/j/collect?**').as('POSTcollect')
-  cy.intercept('GET', 'https://static.netshoes.com.br/ff-webstore-web-analytics/4.0.4/wasm/release.wasm').as("GetList")
-  cy.intercept("POST", "https://api.pn.vg/api/v1/pushonsite/**").as("registrationRequest");
   cy.visit('auth/login');
   cy.wait('@GetList')
   cy.wait('@POSTcollect')
@@ -48,6 +44,7 @@ Cypress.Commands.add('registerUser', (userData) => {
   cy.fillRegistrationForm(userData);
   cy.get('button[qa-auto="gift-wrapping-select-button"]').click();
   cy.get('[data-testid="actionEmailButton"]').click()
+  cy.wait('@PostReload')
 });
 
 Cypress.Commands.add('enterConfirmationCode', (email) => {
@@ -57,3 +54,13 @@ Cypress.Commands.add('enterConfirmationCode', (email) => {
     cy.get(':nth-child(4) > .otp-input').type(confirmationCode01);
   });
 });
+
+Cypress.Commands.add('Interceptation', () => {
+  cy.intercept('POST', 'https://www.google.com/recaptcha/api2/reload?**').as('PostReload')
+  cy.intercept('POST', 'https://www.google-analytics.com/j/collect?**').as('POSTcollect')
+  cy.intercept('GET', 'https://static.netshoes.com.br/ff-webstore-web-analytics/4.0.4/wasm/release.wasm').as("GetList")
+  cy.intercept("POST", "https://api.pn.vg/api/v1/pushonsite/**").as("registrationRequest");
+  cy.intercept('POST', 'https://apm.netshoes.com.br/intake/v2/rum/events', {
+    prevent: true 
+  });
+})
