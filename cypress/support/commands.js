@@ -40,9 +40,9 @@ Cypress.Commands.add('registerUser', (userData) => {
   cy.wait('@PostReload')
   cy.get('#email').type(userData.email);
   cy.get(':nth-child(2) > .column > .form-group > [data-testid="submitButton"]').click();
-  cy.get('.bGGcZJZR7IsEsQjTbspD-html-close-button').click()
+  // cy.get('.bGGcZJZR7IsEsQjTbspD-html-close-button').click()
   cy.fillRegistrationForm(userData);
-  cy.get('button[qa-auto="gift-wrapping-select-button"]').click();
+  cy.get('button[qa-auto="gift-wrapping-select-button"]').click();  
   cy.get('[data-testid="actionEmailButton"]').click()
   cy.wait('@PostReload')
 });
